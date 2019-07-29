@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main{
+    int[][] maze;
+    final static int mlen=6;
+    Main(int[][] maze){
+        this.maze=maze;
+    }
+    private boolean solve(int m,int n){
+        if(!isPossible(m,n))
+            return false;
+        maze[m][n]=2;
+        if(maze[mlen-1][mlen-1]==2)
+            return true;
+        int[] x={1,0,0,-1};
+        int[] y={0,-1,1,0};
+        
+        for(int k=0;k<4;k++){
+            if(solve(m+x[k],n+y[k]))
+                return true;
+        }
+        maze[m][n]=1;
+        return false;
+    }
+    private boolean isPossible(int m,int n){
+        if(m<0 || m>=mlen || n<0 || n>=mlen || maze[m][n]==0 || maze[m][n]==2)
+            return false;
+        else
+            return true;
+    }
+    private void printRoute(){
+        for(int i=0;i<mlen;i++){
+            for(int j=0;j<mlen;j++){
+                System.out.print(maze[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+
+     public static void main(String []args) throws IOException{
+        //System.out.println("Enter Maze Structure:\n");
+        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+        String[][] split=new String[mlen][mlen];
+        int[][] mz =new int[mlen][mlen];
+        for(int i=0;i<mlen;i++){
+            split[i]=br.readLine().split(" ");
+            for(int j=0;j<mlen;j++){
+                mz[i][j]=Integer.parseInt(split[i][j]);
+            }
+        }
+        System.out.println("Rat Route:\n");
+        Main rt=new Main(mz);
+        if(!rt.solve(0,0))
+            System.out.println("---Not Found---");
+        else
+            rt.printRoute();
+     }
+}
