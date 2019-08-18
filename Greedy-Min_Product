@@ -1,0 +1,36 @@
+public class Min_Product{
+    public static int findMinProduct(int[] arr,int n){
+        int product=1;
+        int negct=0,zerct=0;
+        int posmin=Integer.MAX_VALUE,negmax=Integer.MIN_VALUE;
+        
+        for(int i=0;i<n;i++){
+            if(arr[i]==0){
+                zerct++;
+                continue;
+            }
+            if(arr[i]<0){
+                negct++;
+                negmax=(arr[i]>negmax)?arr[i]:negmax;
+            }
+            if(arr[i]>0){
+                posmin=(arr[i]<posmin)?arr[i]:posmin;
+            }
+            product*=arr[i];
+        }
+        if(zerct==n ||(zerct>0 && negct==0))
+            return 0;
+        else if(negct==0 && zerct==0)
+            return posmin;
+        else if(negct%2==0 && negct>0)
+            product=product/negmax;
+        
+        return product;
+    }
+
+     public static void main(String []args){
+        int[] arr={-1,0,4,3};
+        int n=4;
+        System.out.println("Minimum Product : "+findMinProduct(arr,n));
+     }
+}
