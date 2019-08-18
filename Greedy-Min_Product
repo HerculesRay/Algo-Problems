@@ -1,4 +1,4 @@
-public class Min_Product{
+public class MinProduct{
     public static int findMinProduct(int[] arr,int n){
         int product=1;
         int negct=0,zerct=0;
