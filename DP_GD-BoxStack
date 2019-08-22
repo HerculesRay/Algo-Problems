@@ -1,0 +1,69 @@
+import java.util.*;
+import java.io.*;
+
+public class BoxStack{
+    static class Box implements Comparable<Box>{
+        int wid;
+        int dep;
+        int hei;
+        int area;
+        Box(int w,int d,int h){
+            wid=w;
+            dep=d;
+            hei=h;
+            area=w*d;
+            //
+          //  System.out.println(wid+" "+dep+" "+hei+" "+area);
+        }
+        public int compareTo(Box b){
+            int ret = b.area-this.area;
+            // if(ret==0)
+            //     return b.hei-this.hei;
+            // else
+                return ret;
+        }
+    }
+    public static int findStackHeight(List<Box> arr){
+        Collections.sort(arr);
+        int len=arr.size();
+        int[] heigs=new int[len];
+        Box[] lastb=new Box[len];
+        //
+        // for(int i=0;i<len;i++){
+        //     System.out.print(arr.get(i).area+" ");
+        // }
+        
+        heigs[0]=arr.get(0).hei;
+        int k=0;
+        for(int i=1;i<len;i++){
+            int maxCh=0;
+            for(int j=k;j>=0;j--){
+                if(arr.get(j).wid>arr.get(i).wid && arr.get(j).dep>arr.get(i).dep){
+                    maxCh=(maxCh>heigs[j])?maxCh:heigs[j];
+                }
+            }
+            heigs[++k]=maxCh+arr.get(i).hei;
+        }
+        int maxh=0;
+        for(int i=0;i<=k;i++){
+            maxh=maxh>heigs[i]?maxh:heigs[i];
+        }
+        return maxh;
+    }
+
+    public static void main(String []args){
+        int[] wid={4,1,4,10,5};
+        int[] hei={6,2,5,12,5};
+        int[] dep={7,3,6,32,7};
+        int n=wid.length;
+        List<Box> arr=new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            arr.add(new Box(wid[i],hei[i],dep[i]));
+            arr.add(new Box(dep[i],wid[i],hei[i]));
+            arr.add(new Box(hei[i],dep[i],wid[i]));
+        }
+
+        System.out.println("\nBox Stack Height : "+findStackHeight(arr));
+    }
+}
