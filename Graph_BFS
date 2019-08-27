@@ -1,0 +1,44 @@
+import java.util.*;
+public class Graph{
+    private int v;
+    private LinkedList<Integer>[] adj;
+   
+    Graph(int v){
+        this.v=v;
+        adj=new LinkedList[v+1];
+        for(int i=1;i<=v;i++){
+            adj[i]=new LinkedList();
+        }
+    }
+    private void addEdge(int u,int v){
+        adj[u].add(v);
+        adj[v].add(u);
+    }
+    void BFS(int st){
+        boolean[] visited=new boolean[v];
+        LinkedList<Integer> queue=new LinkedList<>();
+        queue.add(st);
+        
+        while(queue.size()!=0){
+            visited[st-1]=true;
+            st=queue.poll();
+            System.out.println(st);
+            Iterator<Integer> it=adj[st].listIterator();
+            while(it.hasNext()){
+                int i=it.next();
+                if(!visited[i-1])
+                    queue.add(i);
+            }
+        }
+    }
+
+    public static void main(String []args){
+        Graph gr=new Graph(4);
+        gr.addEdge(1,3);
+        gr.addEdge(1,4);
+        gr.addEdge(3,2);
+         
+        gr.BFS(2);
+        System.out.println("End");
+     }
+}
