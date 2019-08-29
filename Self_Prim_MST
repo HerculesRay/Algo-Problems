@@ -101,18 +101,19 @@ public class Graph{
             System.out.println(result[i].scr+"<----"+result[i].wei+"--->"+result[i].des);
         
         
-        System.out.println(first_min.wei);
+       // System.out.println(first_min.wei);
     }
     public static void main(String []args){
         Graph gr=new Graph(5,6);
         gr.addEdge(0,1,10);
-        gr.addEdge(0,2,12);
+        gr.addEdge(0,2,7);
         gr.addEdge(0,3,13);
         gr.addEdge(1,2,15);
         gr.addEdge(2,3,11);
-        gr.addEdge(2,4,14);
-        
+        gr.addEdge(2,4,1);
+   //     long startTime = System.nanoTime();
         gr.prim();
-        System.out.println("End");
+        
+       // System.out.println("End"+(System.nanoTime() - startTime));
     }
 }
