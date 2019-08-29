@@ -1,0 +1,89 @@
+import java.util.Arrays;
+
+public class Graph{
+    int v,e;
+    class Edge implements Comparable<Edge>{
+        int scr;
+        int des;
+        int wei;
+        public int compareTo(Edge e){
+            return this.wei-e.wei;
+        }
+    }
+    Edge[] ed;
+    Graph(int v,int e){
+        this.v=v;
+        this.e=e;
+        ed=new Edge[e];
+        for(int i=0;i<e;i++)
+            ed[i]=new Edge();
+    }
+    class Subset{
+        int parent;
+        int rank;
+        Subset(int i){
+            parent=i;
+            rank=0;
+        }
+    }
+    int find(Subset[] sub,int t){
+        int r=sub[t].parent;
+        if(r!=t)
+            r=find(sub,r);
+        return r;
+    }
+    void union(Subset[] sub,int x,int y){
+        if(sub[x].rank>sub[y].rank)
+            sub[y].parent=x;
+        else if(sub[y].rank>sub[x].rank)
+            sub[x].parent=y;
+        else{
+            sub[y].rank++;
+            sub[x].parent=y;
+        }
+    }
+    void Kruskal(){
+        Arrays.sort(ed);
+        Edge[] result=new Edge[e-1];
+        int e=0,j=0;
+        Subset[] subs=new Subset[v];
+        for(int i=0;i<v;i++)
+            subs[i]=new Subset(i);
+        j=0;
+        while(e<v-1){
+            Edge next=ed[j++];
+            int x=find(subs,next.scr);
+            int y=find(subs,next.des);
+            if(x!=y){
+                e++;
+                union(subs,x,y);
+                System.out.println(next.scr+"<---"+next.wei+"--->"+next.des);
+            }
+        }
+    }
+    
+    public static void main(String []args){
+        Graph gr=new Graph(4,5);
+        gr.ed[0].scr=0;
+        gr.ed[0].des=1;
+        gr.ed[0].wei=10;
+        
+        gr.ed[1].scr=0;
+        gr.ed[1].des=3;
+        gr.ed[1].wei=5;
+        
+        gr.ed[2].scr=0;
+        gr.ed[2].des=2;
+        gr.ed[2].wei=6;
+        
+        gr.ed[3].scr=2;
+        gr.ed[3].des=3;
+        gr.ed[3].wei=4;
+        
+        gr.ed[4].scr=1;
+        gr.ed[4].des=3;
+        gr.ed[4].wei=15;
+        
+        gr.Kruskal();
+    }
+}
