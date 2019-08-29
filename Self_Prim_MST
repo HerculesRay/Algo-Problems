@@ -1,0 +1,118 @@
+import java.util.*;
+
+public class Graph{
+    int v,e;
+    static int num_edge=0;
+    class Edge implements Comparable<Edge>{
+        int scr,des,wei;
+        Edge(int s,int d,int w){
+            scr=s;
+            des=d;
+            wei=w;
+        }
+        public int compareTo(Edge e){
+            return this.wei-e.wei;
+        }
+    }
+    LinkedList<Edge>[] adj;
+ //   Edge[] ed;
+    Edge first_min=new Edge(-1,-1,Integer.MAX_VALUE);
+    Graph(int v,int e){
+        this.v=v;
+        this.e=e;
+        adj=new LinkedList[v];
+        for(int i=0;i<v;i++)
+            adj[i]=new LinkedList();
+    //    Edge[] ed=new Edge[e];
+    }
+    void addEdge(int s,int d,int w){
+        adj[s].push(new Edge(s,d,w));
+        adj[d].push(new Edge(s,d,w));
+        if(first_min.wei>adj[s].peek().wei){
+            first_min.scr=adj[s].peek().scr;
+            first_min.des=adj[s].peek().des;
+            first_min.wei=adj[s].peek().wei;
+        }
+    //    System.out.println(num_edge);
+    //    ed[num_edge++]=adj[s].peek();
+    }
+    class Subset{
+        int parent,rank;
+        Subset(int p){
+            parent=p;
+            rank=0;
+        }
+    }
+    int find(Subset[] sub,int a){
+        int retp=sub[a].parent;
+        if(a!=retp)
+            retp=find(sub,retp);
+        return retp;
+    }
+    void union(Subset[] sub,int a,int b){
+        if(sub[a].rank>sub[b].rank){
+            sub[b].parent=a;
+        }
+        else if(sub[b].rank>sub[a].rank){
+            sub[a].parent=b;
+        }
+        else{
+            sub[a].parent=b;
+            sub[b].rank++;
+        }
+    }
+    void prim(){
+        // Edge first_min=ed[0];
+        // for(int i=1;i<num_edge;i++)
+        //     first_min=(ed[i].wei<first_min.wei)?ed[i]:first_min;
+        Subset[] subs=new Subset[v];
+        for(int i=0;i<v;i++){
+            subs[i]=new Subset(i);
+        }
+        boolean[][] isAdded=new boolean[v][v];
+        Edge[] result=new Edge[v-1];
+        int k=0;
+        PriorityQueue<Edge> pq=new PriorityQueue<>();
+        pq.add(first_min);
+        Iterator<Edge> it;
+        while(pq.peek()!=null && k<v-1){
+            Edge next=pq.poll();
+            if(isAdded[next.scr][next.des]==true)
+                continue;
+            int x=find(subs,next.scr);
+            int y=find(subs,next.des);
+            if(x!=y){
+                isAdded[next.scr][next.des]=true;
+                it=adj[next.scr].listIterator();
+                while(it.hasNext()){
+                    pq.add(it.next());
+                 //   it=it.next;
+                }
+                it=adj[next.des].listIterator();
+                while(it.hasNext()){
+                    pq.add(it.next());
+                  //  it=it.next;
+                }
+                union(subs,x,y);
+                result[k++]=next;
+            }
+        }
+        for(int i=0;i<k;i++)
+            System.out.println(result[i].scr+"<----"+result[i].wei+"--->"+result[i].des);
+        
+        
+        System.out.println(first_min.wei);
+    }
+    public static void main(String []args){
+        Graph gr=new Graph(5,6);
+        gr.addEdge(0,1,10);
+        gr.addEdge(0,2,12);
+        gr.addEdge(0,3,13);
+        gr.addEdge(1,2,15);
+        gr.addEdge(2,3,11);
+        gr.addEdge(2,4,14);
+        
+        gr.prim();
+        System.out.println("End");
+    }
+}
