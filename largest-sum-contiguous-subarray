@@ -1,0 +1,17 @@
+public class LCS{
+    static int fmax(int a,int b){return (a>b)?a:b;}
+    public static int findLCS(int[] arr){
+        int n=arr.length;
+        int sum=arr[0];
+        int max=Integer.MIN_VALUE;
+        for(int i=1;i<n;i++){
+            sum=fmax(sum+arr[i],arr[i]);
+            max=fmax(sum,max);
+        }
+        return max;
+    }
+    public static void main(String[] args){
+        int[] arr={-2, -3, 4, -1, -2, 1, 5, -3};
+        System.out.println(findLCS(arr));
+    }
+}
