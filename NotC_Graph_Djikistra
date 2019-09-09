@@ -1,0 +1,84 @@
+import java.util.*;
+
+public class Graph{
+    static int fmin(int a,int b){ return (a>b)?b:a;}
+    List<Integer>[] adji;
+    int[][] adjm;
+    int v;
+    int e;
+    Graph(int v,int e){
+        this.v=v;
+        this.e=e;
+        adji=new LinkedList[v+1];
+        adjm=new int[v+1][v+1];
+        for(int i=1;i<=v;i++){
+            adji[i]=new LinkedList<>();
+        }
+        for(int i=1;i<=v;i++){
+            for(int j=1;j<=v;j++){
+                if(i==j)
+                    adjm[i][j]=0;
+                else
+                    adjm[i][j]=Integer.MAX_VALUE;
+            }
+        }
+    }
+    class Edge implements Comparable<Edge>{
+        int u;
+        int v;
+        int wei;
+        Edge(int u,int v,int w){
+            this.u=u;
+            this.v=v;
+            this.wei=w;
+        }
+        public int compareTo(Edge e){
+            return this.wei-e.wei;
+        }
+    }
+    void addEdge(int u,int v,int wt){
+        adjm[u][v]=fmin(adjm[u][v],wt);
+        adji[u].add(v);
+    }
+    void printGraphM(){
+        for(int i=1;i<=v;i++){
+            for(int j=1;j<=v;j++){
+                System.out.print(adjm[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
+    void djikstra(){
+        List<Edge> queue=new LinkedList<>();
+        Iterator<Integer> it;
+        Edge te;
+        for(int i=1;i<=v;i++){
+            it=adji[i].listIterator();
+            while(it.hasNext()){
+                int t=it.next();
+                queue.add(new Edge(i,t,adjm[i][t]));
+            }
+            Collections.sort(queue);
+            while(queue.isEmpty()){
+                  te=queue.poll;
+                }
+        }   
+    }
+
+    public static void main(String []args){
+        Graph gr=new Graph(6,8);
+        gr.addEdge(1,2,2);
+        gr.addEdge(1,3,4);
+        gr.addEdge(2,3,1);
+        gr.addEdge(2,4,7);
+        gr.addEdge(3,5,3);
+        gr.addEdge(5,4,2);
+        gr.addEdge(4,6,1);
+        gr.addEdge(5,6,5);
+        
+        gr.djikstra();
+        gr.printGraphM();
+        
+        System.out.println("END of Program");
+    }
+}
