@@ -1,0 +1,158 @@
+import java.util.Scanner;
+
+public class TicTacToe{
+    int[][] ttt;
+    String p1;
+    String p2;
+    TicTacToe(String a,String b){
+        ttt=new int[3][3];
+        this.p1=a;
+        this.p2=b;
+    }
+    void play(Scanner sc){
+        while(ifPossible()){
+            System.out.println(p1+" please enter a character :");
+            enterVal(sc.nextInt(),1);
+            printTtt();
+            if(!check())break;
+            
+            System.out.println(p2+" please enter a character :");
+            enterVal(sc.nextInt(),2);
+            printTtt();
+            if(!check())break;
+        }
+    }
+    void enterVal(int ch,int v){
+        int x=-1,y=-1;
+        switch(ch){
+           case 1:
+                x=0;y=0;
+            break;
+            case 2:
+                x=0;y=1;
+            break;
+            case 3:
+                x=0;y=2;
+            break;
+            case 4:
+                x=1;y=0;
+            break;
+            case 5:
+                x=1;y=1;
+            break;
+            case 6:
+                x=1;y=2;
+            break;
+            case 7:
+                x=2;y=0;
+            break;
+            case 8:
+                x=2;y=1;
+            break;
+            case 9:
+                x=2;y=2;
+            break;
+        }
+        ttt[x][y]=v;
+    }
+    boolean ifPossible(){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(ttt[i][j]==0)
+                    return true;
+            }
+        }
+        return false;
+    }
+    boolean check(){
+        
+        int ct1=0,ct2=0,ct3=0,ct4=0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                    if(ttt[i][j]==1){
+                        ct1++;
+                    }
+                    else if(ttt[i][j]==2){
+                        ct2++;
+                    }
+                    if(ttt[j][i]==2){
+                        ct4++;
+                    }
+                    else if(ttt[j][i]==1){
+                        ct3++;
+                    }
+            }
+            if(ct2==3 || ct4==3){
+                System.out.println(p2+" won the game.");
+                return false;
+            }
+            else if(ct1==3 || ct3==3 ){
+                System.out.println(p1+" won the game.");
+                return false;
+            }
+            else{
+                ct1=0;ct2=0;ct3=0;ct4=0;
+            }
+        }
+        for(int i=0;i<3;i++){
+            if(ttt[i][i]==1){
+                        ct1++;
+            }
+            else if(ttt[i][i]==2){
+                        ct2++;
+            }
+            if(ttt[2-i][i]==2){
+                        ct4++;
+            }
+            else if(ttt[2-i][i]==1){
+                        ct3++;
+            }
+        }
+        if(ct1==3 || ct3==3){
+            System.out.println(p1+" won the game.");
+            return false;
+        }
+        else if(ct2==3 || ct4==3){
+            System.out.println(p2+" won the game.");
+            return false;
+        }
+        return true;
+    }
+    void printTtt(){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                System.out.print(ttt[i][j]+"   ");
+            }
+            System.out.println();
+        }
+        System.out.println("Enter below number to fill");
+        
+        System.out.println("1 | 2 | 3");
+        System.out.println("---------");
+        System.out.println("4 | 5 | 6");
+        System.out.println("---------");
+        System.out.println("7 | 8 | 9");
+    }
+    
+     public static void main(String []args){
+        System.out.println("Let's Play\nTic Tac Toe\n");
+        System.out.println("Enter Player Names");
+        
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Player 1: ");
+        String p1=sc.nextLine();
+        System.out.println("Player 2: ");
+        String p2=sc.nextLine();
+        System.out.println("Enter below number to fill");
+        
+        System.out.println("1 | 2 | 3");
+        System.out.println("---------");
+        System.out.println("4 | 5 | 6");
+        System.out.println("---------");
+        System.out.println("7 | 8 | 9");
+        
+        TicTacToe ttt=new TicTacToe(p1,p2);
+        ttt.play(sc);
+        System.out.println("Game Ended");
+     }
+}
