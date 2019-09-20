@@ -11,12 +11,12 @@ public class TicTacToe{
     }
     void play(Scanner sc){
         while(ifPossible()){
-            System.out.println(p1+" please enter a character :");
+            System.out.println(p1+" please enter a position :");
             enterVal(sc.nextInt(),1);
             printTtt();
             if(!check())break;
             
-            System.out.println(p2+" please enter a character :");
+            System.out.println(p2+" please enter a position :");
             enterVal(sc.nextInt(),2);
             printTtt();
             if(!check())break;
