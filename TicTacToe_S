@@ -1,0 +1,287 @@
+import java.util.*;
+import java.io.*;
+
+public class TicTacToe_S {
+    int[][] ttt;
+    String p1;
+    String p2;
+    BufferedReader bfr;
+    TicTacToe_S(String s,BufferedReader bfr){
+        ttt=new int[3][3];
+        p1=s;
+        p2="Computer";
+        this.bfr=bfr;
+    }
+    int computerMove(){
+        // int[] ij={1,1};
+        int[] ij=new int[]{-1,-1};
+        ij=canIwin(2);
+        // System.out.println("Check canIwin2");
+        if(ij[0]==-1 || ij[1]==-1)
+            ij=canIwin(1);
+        if(ij[0]==-1 || ij[1]==-1)
+            ij=bestMove();
+         return findPos(ij);
+    }
+    int findPos(int[] ij){
+        //  System.out.println("Check findPos"+ij[0]+" "+ij[1]);
+        int ct=1;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i==ij[0] && j==ij[1])
+                    return ct;
+                else ct++;
+            }
+        }
+        return 1;
+    }
+    int[] bestMove(){
+        // System.out.println("Check bestMove");
+        if(ttt[1][1]==0)
+            return new int[]{1,1};
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i!=1 && j!=1){
+                    if(ttt[i][j]==0)
+                       return new int[]{i,j};
+                }
+            }
+        }
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i==1 || j==1){
+                    if(ttt[i][j]==0)
+                       return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{-1,-1};
+    }
+    int[] canIwin(int fr){
+                // System.out.println("Check canIwin");
+        int ctz=0,ct2=0;
+        int ri=-1,rj=-1;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(ttt[i][j]==0){
+                    ctz++;
+                    ri=i;rj=j;
+                }
+                else if(ttt[i][j]==fr)
+                    ct2++;
+            }
+            if(ct2==2 && ctz==1){
+                return new int[]{ri,rj};
+            }
+            else{
+                ctz=0;ct2=0;
+                ri=-1;rj=-1;
+            }
+        }
+        // System.out.println("Check 1");
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(ttt[j][i]==0){
+                    ctz++;
+                    ri=i;rj=j;
+                }
+                else if(ttt[j][i]==fr)
+                    ct2++;
+            }
+            if(ct2==2 && ctz==1){
+                return new int[]{rj,ri};
+            }
+            else{
+                ctz=0;ct2=0;
+                ri=-1;rj=-1;
+            }
+        }
+        // System.out.println("Check 2");
+        for(int i=0;i<3;i++){
+            if(ttt[i][i]==0){
+                    ctz++;
+                    ri=i;rj=i;
+            }
+            else if(ttt[i][i]==fr)
+                ct2++;
+        }
+        if(ct2==2 && ctz==1){
+            return new int[]{ri,rj};
+        }
+        else{
+                ctz=0;ct2=0;
+                ri=-1;rj=-1;
+        }
+        // System.out.println("Check 3");
+        for(int i=0;i<3;i++){
+            if(ttt[2-i][i]==0){
+                    ctz++;
+                    ri=2-i;rj=i;
+            }
+            else if(ttt[2-i][i]==fr)
+                ct2++;
+        }
+        if(ct2==2 && ctz==1){
+            return new int[]{ri,rj};
+        }
+        else{
+                ctz=0;ct2=0;
+                ri=-1;rj=-1;
+        }
+        // System.out.println("Check 4");
+        return new int[]{rj,ri};
+    }
+    void play() throws IOException{
+        int count=0;
+        System.out.println("Enter below number to fill");
+        
+        System.out.println("1 | 2 | 3");
+        System.out.println("---------");
+        System.out.println("4 | 5 | 6");
+        System.out.println("---------");
+        System.out.println("7 | 8 | 9");
+        
+        while(true){
+            try{
+            System.out.println(p1+" please enter a character :\n");
+            enterVal(Integer.parseInt(bfr.readLine()),1);
+            printTtt();
+            if(!check())break;
+            count++;
+            if(count==9)break;
+            
+            System.out.println(p2+" enters value.\n");
+            enterVal(computerMove(),2);
+            printTtt();
+            if(!check())break;
+            count++;
+            if(count==9)break;
+            }
+            catch(Exception e){
+                
+            }
+        }
+    }
+    void enterVal(int ch,int v){
+        int x=-1,y=-1;
+        switch(ch){
+           case 1:
+                x=0;y=0;
+            break;
+            case 2:
+                x=0;y=1;
+            break;
+            case 3:
+                x=0;y=2;
+            break;
+            case 4:
+                x=1;y=0;
+            break;
+            case 5:
+                x=1;y=1;
+            break;
+            case 6:
+                x=1;y=2;
+            break;
+            case 7:
+                x=2;y=0;
+            break;
+            case 8:
+                x=2;y=1;
+            break;
+            case 9:
+                x=2;y=2;
+            break;
+        }
+        if(ttt[x][y]==0 && x!=-1)
+            ttt[x][y]=v;
+        else{
+            System.out.println("____Wrong Position Selected____\nSelect an empty position from above: ");
+            try{
+                enterVal(Integer.parseInt(bfr.readLine()),v);
+            }
+            catch(Exception e){
+                
+            }
+        }
+    }
+    void printTtt(){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                System.out.print(ttt[i][j]+"   ");
+            }
+            System.out.println();
+        }
+        System.out.println("Enter below number to fill");
+        
+        System.out.println("1 | 2 | 3");
+        System.out.println("---------");
+        System.out.println("4 | 5 | 6");
+        System.out.println("---------");
+        System.out.println("7 | 8 | 9");
+    }
+    boolean check(){
+        int ct1=0,ct2=0,ct3=0,ct4=0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                    if(ttt[i][j]==1){
+                        ct1++;
+                    }
+                    else if(ttt[i][j]==2){
+                        ct2++;
+                    }
+                    if(ttt[j][i]==2){
+                        ct4++;
+                    }
+                    else if(ttt[j][i]==1){
+                        ct3++;
+                    }
+            }
+            if(ct2==3 || ct4==3){
+                System.out.println(p2+" won the game.");
+                return false;
+            }
+            else if(ct1==3 || ct3==3 ){
+                System.out.println(p1+" won the game.");
+                return false;
+            }
+            else{
+                ct1=0;ct2=0;ct3=0;ct4=0;
+            }
+        }
+        for(int i=0;i<3;i++){
+            if(ttt[i][i]==1){
+                        ct1++;
+            }
+            else if(ttt[i][i]==2){
+                        ct2++;
+            }
+            if(ttt[2-i][i]==2){
+                        ct4++;
+            }
+            else if(ttt[2-i][i]==1){
+                        ct3++;
+            }
+        }
+        if(ct1==3 || ct3==3){
+            System.out.println(p1+" won the game.");
+            return false;
+        }
+        else if(ct2==3 || ct4==3){
+            System.out.println(p2+" won the game.");
+            return false;
+        }
+        return true;
+    }
+
+     public static void main(String []args) throws IOException{
+        System.out.println("Let's Play\nTic Tac Toe\n");
+        System.out.println("Enter Your Name");
+        
+        BufferedReader bfr=new BufferedReader(new InputStreamReader(System.in));
+        String p1=bfr.readLine();
+        TicTacToe_S ts=new TicTacToe_S(p1,bfr);
+        ts.play();
+        System.out.println("Game Ended");
+     }
+}
