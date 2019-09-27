@@ -20,6 +20,8 @@ public class TicTacToe_S {
         if(ij[0]==-1 || ij[1]==-1)
             ij=canIwin(1);
         if(ij[0]==-1 || ij[1]==-1)
+            ij=spCheck();
+        if(ij[0]==-1 || ij[1]==-1)
             ij=bestMove();
          return findPos(ij);
     }
@@ -34,6 +36,28 @@ public class TicTacToe_S {
             }
         }
         return 1;
+    }
+    int[] spCheck(){
+        int ct=0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                if(i!=1 && j!=1){
+                    if(ttt[i][j]==1)
+                        ct++;
+                }
+            }
+        }
+        if(ct==2){
+            for(int i=0;i<3;i++){
+                for(int j=0;j<3;j++){
+                    if(i==1 || j==1){
+                        if(ttt[i][j]==0)
+                            return new int[]{i,j};
+                    }
+                }
+            }
+        }
+        return new int[]{-1,-1};
     }
     int[] bestMove(){
         // System.out.println("Check bestMove");
