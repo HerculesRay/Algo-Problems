@@ -1,0 +1,29 @@
+//  Sieve of Eratosthenes
+
+
+
+import java.util.Arrays;
+
+public class HelloWorld{
+
+     public static void main(String []args){
+         int till=1000,count=0;
+         boolean[] prime=new boolean[till+1];
+         Arrays.fill(prime,true);
+         for(int i=2;i<=till;i++){
+             if(prime[i]==true){
+                 for(int j=i*i;j<=till;j+=i){
+                     if(prime[j]==true)
+                        prime[j]=false;
+                 }
+             }
+         }
+        for(int i=1;i<=till;i++){
+            if(prime[i]==true){
+                 count++;
+                System.out.println(i);
+            }
+        }
+        System.out.println("Hello World "+count);
+     }
+}
