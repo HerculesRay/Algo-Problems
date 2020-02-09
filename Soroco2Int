@@ -1,0 +1,34 @@
+public class Soroco2Int{
+
+     public static void main(String []args){
+        int num=2244790;
+        int[] nums=getNumArray(num);
+        int lastDind=-1;
+        int len=nums.length;
+        for(int i=len-1;i>0;i--){
+            if(nums[i]>=nums[i-1])
+                continue;
+            lastDind=i-1;
+            nums[lastDind]--;
+        }
+        if(lastDind!=-1){
+            for(int i=lastDind+1;i<len;i++){
+                nums[i]=9;
+            }
+        }
+        for(int i:nums){
+            System.out.print(i);
+        }
+        // String result=nums.toString();
+        // System.out.println(result+"\nHello World");
+     }
+     static int[] getNumArray(int num){
+         String str=String.valueOf(num);
+         int len=str.length();
+         int[] result=new int[len];
+         for(int i=0;i<len;i++){
+             result[i]=Integer.parseInt(String.valueOf(str.charAt(i)));
+         }
+         return result;
+     }
+}
