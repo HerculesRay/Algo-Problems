@@ -1,0 +1,79 @@
+
+
+
+import java.util.*;
+public class ExpressionEvaluator{
+    char[] exp;
+    //int result=0;
+    ExpressionEvaluator(String exps){
+        this.exp=exps.toCharArray();
+    }
+    static char lastCh='+';
+    static int ind=0;
+    public int evaluateExp(){
+        int count=0;
+        int sum=0;
+        List<Character> qu=new ArrayList<>();
+        //System.out.println(exp.length+"TEST");
+        for(int i=ind;i<exp.length;i++){
+          //  System.out.println(exp[i]+"TEST");
+            if(exp[i]=='('){
+                if(i-1>=0)
+                    lastCh=exp[i-1];
+                if(lastCh=='-'){
+                    ind=i+1;
+                    sum-=evaluateExp();
+                }
+                else{
+                    ind=i+1;
+                    sum+=evaluateExp();
+                }
+                i=ind;
+            }
+            else if(exp[i]==')'){
+                ind++;
+                return calculate(qu);
+            }
+            else{
+                ind++;
+                qu.add(exp[i]);
+            }
+        }
+        sum+=calculate(qu);
+        
+        return sum;
+    }
+    public int calculate(List<Character> qu){
+        int len=qu.size();
+        int sum=0;
+        char lastCh='+';
+        StringBuilder num=new StringBuilder("0");
+        for(int i=0;i<len;i++){
+            if(qu.get(i)>='0' && qu.get(i)<='9')
+                num.append(qu.get(i));
+            else{
+                if(lastCh=='-')
+                    sum-=Integer.parseInt(String.valueOf(num));
+                else
+                    sum+=Integer.parseInt(String.valueOf(num));
+                lastCh=qu.get(i);
+                num=new StringBuilder("0");
+            }
+        }
+        if(lastCh=='-')
+            sum-=Integer.parseInt(String.valueOf(num));
+        else
+            sum+=Integer.parseInt(String.valueOf(num));
+  
+        return sum;
+    }
+
+    public static void main(String []args){
+        String str="-1+(-67+(-1+2+9-3-1)+(4))+1-(2)";
+       // String str="1+(2+1)+1";
+        ExpressionEvaluator expe=new ExpressionEvaluator(str);
+        System.out.println(expe.evaluateExp());
+    }
+}
+
+
